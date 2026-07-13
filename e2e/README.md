@@ -6,12 +6,12 @@ Le dossier `enquete/` contient **un** test déjà écrit, pour l'Étape 3.
 
 ## Setup (une seule fois)
 
-1. **L'app** — à la racine `legacy-trainer-session5` :
+1. **L'app** — à la racine `dojo-ai-pm-s5` :
    ```bash
    docker compose up -d          # http://localhost:8080  (admin / admin123)
    ```
    ⚠️ Le port 8080 ne peut servir qu'à une app à la fois. Si tu as déjà l'autre kit qui tourne,
-   coupe-le avant : `docker compose down` dans `legacy-trainer`.
+   coupe-le avant : `docker compose down` dans le dossier de l'autre app.
 
 2. **Playwright** — ici, dans `e2e/` :
    ```bash
@@ -49,7 +49,7 @@ npx playwright test --ui --config=enquete/playwright.config.js
 
 ## Reset de la base (entre deux essais)
 
-À la racine `legacy-trainer-session5` :
+À la racine `dojo-ai-pm-s5` :
 ```bash
 rm -f www/data/compta.db && docker compose restart
 ```

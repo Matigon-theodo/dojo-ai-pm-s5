@@ -32,9 +32,9 @@ Utiliser les tests E2E pour deux moments très concrets de ta vie de PM :
 
 ### 0.a Prépare ton setup (~5 min)
 
-Va dans le dossier **`legacy-trainer-session5`** = *le kit de la séance*. C'est ici que tu travailles.
+Va dans le dossier **`dojo-ai-pm-s5`** = *le kit de la séance*. C'est ici que tu travailles.
 
-- Lance Claude Code depuis le dossier `legacy-trainer-session5`.
+- Lance Claude Code depuis le dossier `dojo-ai-pm-s5`.
 - 🖥️ Lance l'app avec Docker : `docker compose up -d` puis <http://localhost:8080> (`admin` / `admin123`).
 - Prépare Playwright une seule fois : dans le dossier `e2e/`, `npm install` puis `npx playwright install chromium`.
 
@@ -64,11 +64,11 @@ test('je peux me connecter', async ({ page }) => {
 
 **Maintenant, à toi de le lancer dans ton terminal.** Étape par étape :
 
-1. Place-toi dans le dossier `e2e/` (depuis `legacy-trainer-session5`) :
+1. Place-toi dans le dossier `e2e/` (depuis `dojo-ai-pm-s5`) :
    ```bash
    cd e2e
    ```
-2. Vérifie que l'app tourne : ouvre <http://localhost:8080>. Si ça s'affiche, c'est bon. (Sinon : `docker compose up -d` depuis `legacy-trainer-session5`.)
+2. Vérifie que l'app tourne : ouvre <http://localhost:8080>. Si ça s'affiche, c'est bon. (Sinon : `docker compose up -d` depuis `dojo-ai-pm-s5`.)
 3. Lance le test **en mode visible** :
    ```bash
    npx playwright test --config=demo/playwright.config.js --ui

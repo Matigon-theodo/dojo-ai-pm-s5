@@ -2,7 +2,7 @@
 
 > **Source de vérité : le schéma SQLite *live* + `sql/01_schema.sql`** — pas `CLAUDE.md`
 > ni `SPECS.md`, qui décrivent un modèle ne correspondant pas à la base réelle (cf. §4).
-> Vérifié le 30/06/2026 contre `www/data/compta.db` (conteneur `legacy-trainer-web-1`).
+> Vérifié le 30/06/2026 contre `www/data/compta.db` (conteneur `dojo-ai-pm-s5-web-1`).
 >
 > Ce document a deux niveaux de lecture : une **vue d'ensemble pour le PM** (§1), puis une
 > **référence technique détaillée** (§2 à §4) pour les échanges avec la tech.
