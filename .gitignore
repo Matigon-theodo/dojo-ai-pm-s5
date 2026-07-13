@@ -1,0 +1,17 @@
+# Base de données SQLite (régénérée au démarrage du conteneur)
+/www/data/
+
+# Dépendances (réinstallées : composer / npm)
+/vendor/
+tests/vendor/
+e2e/node_modules/
+
+# Caches & artefacts de tests
+tests/.phpunit.result.cache
+test-results/
+playwright-report/
+e2e/test-results/
+e2e/playwright-report/
+
+# macOS
+.DS_Store

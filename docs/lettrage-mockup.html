@@ -1,0 +1,481 @@
+<title>Ketchup Compta — Lettrage (mockup)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #333;
+    background-color: #f5f5f5;
+    line-height: 1.4;
+    padding: 20px 0;
+  }
+
+  #wrapper {
+    width: 960px;
+    max-width: 100%;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid #ccc;
+  }
+
+  /* Header */
+  #header { background: #003366; color: #fff; padding: 15px 20px; position: relative; }
+  #header h1 { font-size: 18px; margin: 0; }
+  #user-info { position: absolute; top: 15px; right: 20px; font-size: 11px; color: #99ccff; }
+
+  /* Nav */
+  #nav { background: #004080; }
+  #nav ul { list-style: none; }
+  #nav > ul > li { display: inline-block; }
+  #nav > ul > li > a { display: block; padding: 10px 15px; color: #fff; text-decoration: none; font-weight: bold; }
+  #nav > ul > li > a:hover { background: #0066cc; }
+  #nav > ul > li > a.active { background: #0066cc; }
+
+  /* Content */
+  #content { padding: 20px; min-height: 400px; }
+  #footer { background: #eee; border-top: 1px solid #ccc; padding: 10px 20px; text-align: center; font-size: 11px; color: #666; }
+
+  h2 { color: #003366; font-size: 16px; margin-bottom: 15px; padding-bottom: 5px; border-bottom: 2px solid #003366; }
+  h3 { color: #333; font-size: 14px; margin-bottom: 10px; }
+
+  /* Flash */
+  .flash { padding: 10px 15px; margin-bottom: 15px; border: 1px solid; }
+  .flash-success { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+  .flash-info { background: #e7f1ff; border-color: #b8daff; color: #004085; }
+
+  /* Buttons */
+  .btn { display: inline-block; padding: 6px 15px; background: #004080; color: #fff; border: none; cursor: pointer; font-size: 12px; text-decoration: none; }
+  .btn:hover { background: #0066cc; }
+  .btn-success { background: #28a745; }
+  .btn-success:hover { background: #218838; }
+  .btn-danger { background: #dc3545; }
+  .btn-danger:hover { background: #c82333; }
+  .btn-small { padding: 3px 8px; font-size: 11px; }
+  .btn:disabled { background: #b5b5b5; cursor: not-allowed; }
+
+  /* Filters bar */
+  .filters { margin-bottom: 15px; padding: 10px; background: #f9f9f9; border: 1px solid #ccc; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+  .filters label { font-weight: bold; }
+  .filters select { padding: 6px 8px; border: 1px solid #ccc; font-size: 12px; }
+
+  /* Tabs */
+  .tabs { display: inline-flex; border: 1px solid #ccc; }
+  .tabs button { padding: 6px 14px; background: #fff; border: none; border-right: 1px solid #ccc; cursor: pointer; font-size: 12px; color: #333; }
+  .tabs button:last-child { border-right: none; }
+  .tabs button.active { background: #003366; color: #fff; font-weight: bold; }
+  .tabs button .count { opacity: .7; font-weight: normal; }
+
+  /* Data table */
+  .data-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+  .data-table th, .data-table td { padding: 8px 10px; border: 1px solid #ccc; text-align: left; }
+  .data-table th { background: #003366; color: #fff; font-weight: bold; }
+  .data-table tr:nth-child(even) { background: #f9f9f9; }
+  .data-table tr:hover { background: #e5e5e5; }
+  .data-table td.number { text-align: right; font-family: "Courier New", monospace; font-variant-numeric: tabular-nums; }
+  .data-table td.center { text-align: center; }
+  .data-table .col-check { width: 36px; text-align: center; }
+  .data-table .col-code { width: 80px; text-align: center; }
+
+  /* Lettering interaction (matches legacy .lettering-* classes) */
+  .lettering-line { cursor: pointer; }
+  .lettering-line.selected { background: #d4edda !important; }
+  .lettering-line .col-check input { transform: scale(1.2); cursor: pointer; }
+
+  .code-badge { display: inline-block; min-width: 22px; padding: 2px 6px; background: #003366; color: #fff; font-weight: bold; font-family: "Courier New", monospace; }
+  .muted { color: #999; }
+
+  .impaye-tag { display: inline-block; padding: 2px 6px; background: #fff3cd; color: #856404; font-size: 10px; border: 1px solid #ffeeba; }
+
+  /* Lettering summary bar */
+  .lettering-summary { margin-top: 15px; padding: 12px 15px; background: #f5f5f5; border: 1px solid #ccc; display: flex; align-items: center; gap: 25px; flex-wrap: wrap; position: sticky; bottom: 0; }
+  .lettering-summary .totals { display: flex; gap: 25px; }
+  .lettering-summary .total-item { font-size: 11px; color: #666; }
+  .lettering-summary .total-item strong { display: block; font-size: 16px; color: #333; font-family: "Courier New", monospace; font-variant-numeric: tabular-nums; }
+  .lettering-summary .ecart strong.balanced { color: #28a745; }
+  .lettering-summary .ecart strong.unbalanced { color: #dc3545; }
+  .lettering-summary .hint { flex: 1; min-width: 180px; font-weight: bold; }
+  .lettering-summary .hint.balanced { color: #28a745; }
+  .lettering-summary .hint.unbalanced { color: #856404; }
+  .lettering-summary .actions { display: flex; gap: 8px; }
+
+  /* Grouped lettered view */
+  .letter-group { border: 1px solid #ccc; margin-bottom: 12px; }
+  .letter-group-head { background: #e5e5e5; padding: 8px 12px; display: flex; align-items: center; gap: 12px; }
+  .letter-group-head .grp-title { font-weight: bold; flex: 1; }
+  .letter-group .data-table { margin-bottom: 0; border: none; }
+  .letter-group .data-table th { display: none; }
+
+  .empty { padding: 20px; text-align: center; color: #888; background: #f9f9f9; border: 1px solid #eee; }
+  .mb-20 { margin-bottom: 20px; }
+
+  /* Confirmation modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); display: flex; align-items: center; justify-content: center; z-index: 500; }
+  .modal { width: 460px; max-width: 92%; background: #fff; border: 1px solid #003366; }
+  .modal-head { background: #003366; color: #fff; padding: 12px 15px; font-size: 14px; font-weight: bold; }
+  .modal-body { padding: 15px; }
+  .modal-body .recap-line { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #eee; }
+  .modal-body .recap-line:last-child { border-bottom: none; }
+  .modal-body .recap-line .lbl { color: #555; }
+  .modal-body .recap-line .val { font-family: "Courier New", monospace; font-variant-numeric: tabular-nums; }
+  .modal-body .code-line { margin: 4px 0 12px; font-size: 13px; }
+  .badge-multiple { display: inline-block; margin: 12px 0 0; padding: 6px 10px; background: #fff3cd; border: 1px solid #ffeeba; color: #856404; }
+  .badge-multiple strong { display: inline-block; }
+  .modal-foot { padding: 12px 15px; background: #f5f5f5; border-top: 1px solid #ccc; display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+  .modal-skip { margin-right: auto; font-size: 11px; color: #555; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+  .modal-skip input { cursor: pointer; }
+</style>
+
+<div id="wrapper">
+  <div id="header">
+    <h1>🍅 Ketchup Compta</h1>
+    <div id="user-info">admin — Déconnexion</div>
+  </div>
+  <div id="nav">
+    <ul>
+      <li><a href="#">Tableau de bord</a></li>
+      <li><a href="#">Écritures</a></li>
+      <li><a href="#" class="active">Lettrage</a></li>
+      <li><a href="#">États</a></li>
+      <li><a href="#">Paramètres</a></li>
+    </ul>
+  </div>
+  <div id="content">
+    <h2>Lettrage</h2>
+
+    <div class="flash flash-info" id="intro-flash">
+      Rapprochez les factures de leurs règlements. Ce qui reste <strong>non lettré</strong> = vos impayés (clients) et restes à payer (fournisseurs).
+    </div>
+
+    <div id="flash-zone"></div>
+
+    <!-- Account picker + tabs -->
+    <div class="filters">
+      <label for="account">Compte&nbsp;:</label>
+      <select id="account"></select>
+
+      <div class="tabs" id="tabs">
+        <button data-filter="unlettered">Non lettré <span class="count" id="cnt-unlettered"></span></button>
+        <button data-filter="lettered">Lettré <span class="count" id="cnt-lettered"></span></button>
+        <button data-filter="all">Tout <span class="count" id="cnt-all"></span></button>
+      </div>
+    </div>
+
+    <div id="view"></div>
+  </div>
+  <div id="footer">Ketchup Compta — mockup lettrage (fausses données) — pour itération de rendu</div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---- Fake data -----------------------------------------------------------
+  // Lines on a single auxiliary account. debit XOR credit. lettrage = code or null.
+  var accounts = {
+    "411000": {
+      label: "411000 — Clients",
+      nextCode: "B", // 'A' already used below
+      lines: [
+        { id: 1, date: "2026-01-05", journal: "VE", piece: "VE2026-000001", label: "Facture Dupont SARL — FA-2026-001", debit: 1200, credit: 0, lettrage: "A" },
+        { id: 2, date: "2026-01-18", journal: "BK", piece: "BK2026-000003", label: "Règlement Dupont SARL — vir.", debit: 0, credit: 1200, lettrage: "A" },
+        { id: 3, date: "2026-01-08", journal: "VE", piece: "VE2026-000002", label: "Facture Martin & Cie — FA-2026-002", debit: 3300, credit: 0, lettrage: null },
+        { id: 4, date: "2026-01-20", journal: "BK", piece: "BK2026-000004", label: "Règlement Martin & Cie — chèque", debit: 0, credit: 3300, lettrage: null },
+        { id: 5, date: "2026-01-12", journal: "VE", piece: "VE2026-000005", label: "Facture Durand SA — FA-2026-005", debit: 4500, credit: 0, lettrage: null },
+        { id: 6, date: "2026-01-14", journal: "VE", piece: "VE2026-000006", label: "Facture Durand SA — FA-2026-006", debit: 1500, credit: 0, lettrage: null },
+        { id: 7, date: "2026-01-22", journal: "BK", piece: "BK2026-000007", label: "Virement Durand SA", debit: 0, credit: 4500, lettrage: null },
+        { id: 8, date: "2026-01-25", journal: "VE", piece: "VE2026-000008", label: "Facture Petit EURL — FA-2026-008", debit: 890, credit: 0, lettrage: null }
+      ]
+    },
+    "401000": {
+      label: "401000 — Fournisseurs",
+      nextCode: "B",
+      lines: [
+        { id: 11, date: "2026-01-10", journal: "AC", piece: "AC2026-000001", label: "Facture Fournitures ABC", debit: 0, credit: 660, lettrage: "A" },
+        { id: 12, date: "2026-01-18", journal: "BK", piece: "BK2026-000002", label: "Règlement Fournitures ABC", debit: 660, credit: 0, lettrage: "A" },
+        { id: 13, date: "2026-01-12", journal: "AC", piece: "AC2026-000002", label: "Facture Location XYZ", debit: 0, credit: 1100, lettrage: null },
+        { id: 14, date: "2026-01-28", journal: "BK", piece: "BK2026-000009", label: "Paiement Location XYZ", debit: 1100, credit: 0, lettrage: null },
+        { id: 15, date: "2026-01-15", journal: "AC", piece: "AC2026-000003", label: "Facture Telecom Pro", debit: 0, credit: 240, lettrage: null }
+      ]
+    }
+  };
+
+  var state = { account: "411000", filter: "unlettered", selected: {}, skipSimpleConfirm: false };
+
+  // ---- Helpers -------------------------------------------------------------
+  function money(n) {
+    var s = Math.abs(n).toFixed(2).replace(".", ",");
+    s = s.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    return (n < 0 ? "-" : "") + s + " €";
+  }
+  function frDate(iso) { var p = iso.split("-"); return p[2] + "/" + p[1] + "/" + p[0]; }
+  function nextLetter(c) { return String.fromCharCode(c.charCodeAt(0) + 1); }
+  function el(id) { return document.getElementById(id); }
+
+  // ---- Rendering -----------------------------------------------------------
+  function render() {
+    var acc = accounts[state.account];
+    var lettered = acc.lines.filter(function (l) { return l.lettrage; });
+    var unlettered = acc.lines.filter(function (l) { return !l.lettrage; });
+
+    el("cnt-unlettered").textContent = "(" + unlettered.length + ")";
+    el("cnt-lettered").textContent = "(" + lettered.length + ")";
+    el("cnt-all").textContent = "(" + acc.lines.length + ")";
+
+    Array.prototype.forEach.call(document.querySelectorAll("#tabs button"), function (b) {
+      b.classList.toggle("active", b.getAttribute("data-filter") === state.filter);
+    });
+
+    var view = el("view");
+    view.innerHTML = "";
+
+    if (state.filter === "unlettered") view.appendChild(renderUnlettered(unlettered));
+    else if (state.filter === "lettered") view.appendChild(renderLettered(lettered));
+    else view.appendChild(renderAll(acc.lines));
+  }
+
+  function lineRow(l, opts) {
+    opts = opts || {};
+    var tr = document.createElement("tr");
+    var checkable = opts.checkable;
+    if (checkable) {
+      tr.className = "lettering-line";
+      if (state.selected[l.id]) tr.classList.add("selected");
+    }
+    var cells = "";
+    if (checkable) {
+      cells += '<td class="col-check"><input type="checkbox" ' + (state.selected[l.id] ? "checked" : "") + '></td>';
+    }
+    cells +=
+      '<td>' + frDate(l.date) + '</td>' +
+      '<td>' + l.journal + '</td>' +
+      '<td>' + l.piece + '</td>' +
+      '<td>' + l.label + '</td>' +
+      '<td class="number">' + (l.debit ? money(l.debit) : "") + '</td>' +
+      '<td class="number">' + (l.credit ? money(l.credit) : "") + '</td>';
+    if (opts.showCode) {
+      cells += '<td class="col-code">' + (l.lettrage ? '<span class="code-badge">' + l.lettrage + '</span>' : '<span class="muted">—</span>') + '</td>';
+    }
+    tr.innerHTML = cells;
+    if (checkable) {
+      tr.addEventListener("click", function (e) {
+        if (e.target.tagName !== "INPUT") {
+          var box = tr.querySelector("input");
+          box.checked = !box.checked;
+        }
+        toggle(l.id, tr.querySelector("input").checked);
+      });
+    }
+    return tr;
+  }
+
+  function tableShell(headers) {
+    var t = document.createElement("table");
+    t.className = "data-table";
+    t.innerHTML = "<thead><tr>" + headers.map(function (h) {
+      return '<th' + (h.cls ? ' class="' + h.cls + '"' : "") + '>' + h.t + '</th>';
+    }).join("") + "</tr></thead><tbody></tbody>";
+    return t;
+  }
+
+  function renderUnlettered(lines) {
+    var wrap = document.createElement("div");
+    if (!lines.length) {
+      wrap.innerHTML = '<div class="empty">Tout est lettré sur ce compte 🎉 — aucun impayé.</div>';
+      return wrap;
+    }
+    var t = tableShell([
+      { t: "", cls: "col-check" }, { t: "Date" }, { t: "Jrnl" }, { t: "N° Pièce" },
+      { t: "Libellé" }, { t: "Débit" }, { t: "Crédit" }
+    ]);
+    var tb = t.querySelector("tbody");
+    lines.forEach(function (l) { tb.appendChild(lineRow(l, { checkable: true })); });
+    wrap.appendChild(t);
+    wrap.appendChild(renderSummary(lines));
+    return wrap;
+  }
+
+  function renderSummary(lines) {
+    var selLines = lines.filter(function (l) { return state.selected[l.id]; });
+    var d = selLines.reduce(function (s, l) { return s + l.debit; }, 0);
+    var c = selLines.reduce(function (s, l) { return s + l.credit; }, 0);
+    var ecart = Math.round((d - c) * 100) / 100;
+    var balanced = selLines.length >= 2 && Math.abs(ecart) < 0.005 && (d > 0);
+
+    var hint, hintCls;
+    if (selLines.length === 0) {
+      hint = "Cochez les lignes qui se compensent (factures + règlements).";
+      hintCls = "";
+    } else if (balanced) {
+      hint = "✓ Équilibré — prêt à letter " + selLines.length + " lignes.";
+      hintCls = "balanced";
+    } else if (ecart > 0) {
+      hint = "Reste " + money(ecart) + " à sélectionner en CRÉDIT.";
+      hintCls = "unbalanced";
+    } else {
+      hint = "Reste " + money(-ecart) + " à sélectionner en DÉBIT.";
+      hintCls = "unbalanced";
+    }
+
+    var bar = document.createElement("div");
+    bar.className = "lettering-summary";
+    bar.innerHTML =
+      '<div class="totals">' +
+        '<div class="total-item">Total débit<strong>' + money(d) + '</strong></div>' +
+        '<div class="total-item">Total crédit<strong>' + money(c) + '</strong></div>' +
+        '<div class="total-item ecart">Écart<strong class="' + (balanced ? "balanced" : "unbalanced") + '">' + money(ecart) + '</strong></div>' +
+      '</div>' +
+      '<div class="hint ' + hintCls + '">' + hint + '</div>' +
+      '<div class="actions">' +
+        '<button class="btn btn-small" id="btn-clear">Tout décocher</button>' +
+        '<button class="btn btn-success" id="btn-letter" ' + (balanced ? "" : "disabled") + '>Letter</button>' +
+      '</div>';
+    bar.querySelector("#btn-clear").addEventListener("click", function () { state.selected = {}; render(); });
+    bar.querySelector("#btn-letter").addEventListener("click", function () { confirmLetter(lines); });
+    return bar;
+  }
+
+  function renderLettered(lines) {
+    var wrap = document.createElement("div");
+    if (!lines.length) {
+      wrap.innerHTML = '<div class="empty">Aucun lettrage sur ce compte pour l\'instant.</div>';
+      return wrap;
+    }
+    var byCode = {};
+    lines.forEach(function (l) { (byCode[l.lettrage] = byCode[l.lettrage] || []).push(l); });
+    Object.keys(byCode).sort().forEach(function (code) {
+      var grp = byCode[code];
+      var d = grp.reduce(function (s, l) { return s + l.debit; }, 0);
+      var c = grp.reduce(function (s, l) { return s + l.credit; }, 0);
+      var box = document.createElement("div");
+      box.className = "letter-group";
+      var head = document.createElement("div");
+      head.className = "letter-group-head";
+      head.innerHTML =
+        '<span class="code-badge">' + code + '</span>' +
+        '<span class="grp-title">' + grp.length + ' lignes — ' + money(d) + ' soldées</span>' +
+        '<button class="btn btn-danger btn-small" data-code="' + code + '">Délettrer</button>';
+      head.querySelector("button").addEventListener("click", function () { doUnletter(code); });
+      box.appendChild(head);
+      var t = tableShell([{ t: "Date" }, { t: "Jrnl" }, { t: "N° Pièce" }, { t: "Libellé" }, { t: "Débit" }, { t: "Crédit" }]);
+      var tb = t.querySelector("tbody");
+      grp.forEach(function (l) { tb.appendChild(lineRow(l, {})); });
+      box.appendChild(t);
+      wrap.appendChild(box);
+    });
+    return wrap;
+  }
+
+  function renderAll(lines) {
+    var wrap = document.createElement("div");
+    var t = tableShell([
+      { t: "Date" }, { t: "Jrnl" }, { t: "N° Pièce" }, { t: "Libellé" },
+      { t: "Débit" }, { t: "Crédit" }, { t: "Lettr.", cls: "col-code" }
+    ]);
+    var tb = t.querySelector("tbody");
+    lines.forEach(function (l) {
+      var tr = lineRow(l, { showCode: true });
+      if (!l.lettrage) {
+        var lastCell = tr.querySelector(".col-code");
+        lastCell.innerHTML = '<span class="impaye-tag">non soldé</span>';
+      }
+      tb.appendChild(tr);
+    });
+    wrap.appendChild(t);
+    return wrap;
+  }
+
+  // ---- Actions -------------------------------------------------------------
+  function toggle(id, on) {
+    if (on) state.selected[id] = true; else delete state.selected[id];
+    // Re-render only the summary for snappy feedback, plus row highlight.
+    render();
+  }
+
+  function flash(msg) {
+    el("flash-zone").innerHTML = '<div class="flash flash-success">' + msg + '</div>';
+  }
+
+  function confirmLetter(lines) {
+    var acc = accounts[state.account];
+    var code = acc.nextCode;
+    var selLines = lines.filter(function (l) { return state.selected[l.id]; });
+    var debitLines = selLines.filter(function (l) { return l.debit > 0; });
+    var creditLines = selLines.filter(function (l) { return l.credit > 0; });
+    var total = debitLines.reduce(function (s, l) { return s + l.debit; }, 0);
+    var isMultiple = debitLines.length > 1 || creditLines.length > 1;
+    var ids = selLines.map(function (l) { return l.id; });
+
+    // Lettrage simple + préférence "ne plus afficher" → on lette sans récap.
+    if (!isMultiple && state.skipSimpleConfirm) { doLetter(code, ids, false); return; }
+
+    var overlay = document.createElement("div");
+    overlay.className = "modal-overlay";
+    overlay.innerHTML =
+      '<div class="modal" role="dialog" aria-modal="true">' +
+        '<div class="modal-head">Confirmer le lettrage</div>' +
+        '<div class="modal-body">' +
+          '<div class="code-line">Ces lignes vont être rapprochées sous le code <span class="code-badge">' + code + '</span></div>' +
+          '<div class="recap-line"><span class="lbl">Lignes au débit</span><span class="val">' + debitLines.length + '</span></div>' +
+          '<div class="recap-line"><span class="lbl">Lignes au crédit</span><span class="val">' + creditLines.length + '</span></div>' +
+          '<div class="recap-line"><span class="lbl">Montant soldé</span><span class="val">' + money(total) + '</span></div>' +
+          (isMultiple
+            ? '<div class="badge-multiple"><strong>Lettrage multiple</strong><br>Vous regroupez plusieurs lignes sous une seule lettre. Vérifiez qu\'elles correspondent bien au <strong>même règlement</strong> — sinon, lettrez-les en groupes séparés pour garder une trace nette par règlement.</div>'
+            : '<div class="badge-multiple" style="background:#d4edda;border-color:#c3e6cb;color:#155724;">Lettrage simple — un débit rapproché d\'un crédit.</div>') +
+        '</div>' +
+        '<div class="modal-foot">' +
+          (isMultiple
+            ? ''
+            : '<label class="modal-skip"><input type="checkbox" id="m-skip"> Ne plus afficher pour les lettrages simples</label>') +
+          '<button class="btn btn-small" id="m-cancel">Annuler</button>' +
+          '<button class="btn btn-success" id="m-confirm">Confirmer le lettrage</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(overlay);
+
+    function close() { document.body.removeChild(overlay); }
+    overlay.addEventListener("click", function (e) { if (e.target === overlay) close(); });
+    overlay.querySelector("#m-cancel").addEventListener("click", close);
+    overlay.querySelector("#m-confirm").addEventListener("click", function () {
+      var skip = overlay.querySelector("#m-skip");
+      if (skip && skip.checked) state.skipSimpleConfirm = true;
+      close();
+      doLetter(code, ids, isMultiple);
+    });
+    overlay.querySelector("#m-confirm").focus();
+  }
+
+  function doLetter(code, ids, isMultiple) {
+    var acc = accounts[state.account];
+    acc.lines.forEach(function (l) { if (ids.indexOf(l.id) !== -1) l.lettrage = code; });
+    acc.nextCode = nextLetter(code);
+    state.selected = {};
+    flash(ids.length + " lignes lettrées sous le code « " + code + " »" + (isMultiple ? " (lettrage multiple)" : "") + ". (action tracée dans le journal d\'audit)");
+    render();
+  }
+
+  function doUnletter(code) {
+    var acc = accounts[state.account];
+    var n = 0;
+    acc.lines.forEach(function (l) { if (l.lettrage === code) { l.lettrage = null; n++; } });
+    flash("Lettrage « " + code + " » annulé — " + n + " lignes redeviennent disponibles. (tracé dans l\'audit)");
+    render();
+  }
+
+  // ---- Wire up -------------------------------------------------------------
+  var sel = el("account");
+  Object.keys(accounts).forEach(function (code) {
+    var o = document.createElement("option");
+    o.value = code; o.textContent = accounts[code].label;
+    sel.appendChild(o);
+  });
+  sel.value = state.account;
+  sel.addEventListener("change", function () { state.account = sel.value; state.selected = {}; render(); });
+
+  Array.prototype.forEach.call(document.querySelectorAll("#tabs button"), function (b) {
+    b.addEventListener("click", function () { state.filter = b.getAttribute("data-filter"); render(); });
+  });
+
+  render();
+})();
+</script>

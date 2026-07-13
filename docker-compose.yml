@@ -1,0 +1,10 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - ./www:/var/www/html
+      - ./sql:/var/www/sql
+    environment:
+      - SQLITE_DB=/var/www/html/data/compta.db

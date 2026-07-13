@@ -1,0 +1,12 @@
+{
+  "name": "ketchup-e2e",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "report": "playwright show-report",
+    "trace": "playwright show-trace"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1"
+  }
+}
