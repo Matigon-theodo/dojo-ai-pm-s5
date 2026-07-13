@@ -32,9 +32,12 @@ Utiliser les tests E2E pour deux moments très concrets de ta vie de PM :
 
 ### 0.a Prépare ton setup (~5 min)
 
-Va dans le dossier **`dojo-ai-pm-s5`** = *le kit de la séance*. C'est ici que tu travailles.
-
-- Lance Claude Code depuis le dossier `dojo-ai-pm-s5`.
+- **Récupère le kit** (dépôt public, une seule commande) puis entre dedans :
+  ```bash
+  git clone https://github.com/Matigon-theodo/dojo-ai-pm-s5.git
+  cd dojo-ai-pm-s5
+  ```
+  Ce dossier `dojo-ai-pm-s5` = *le kit de la séance*, c'est là que tu travailles. **Lance Claude Code depuis ce dossier.**
 - 🖥️ Lance l'app avec Docker : `docker compose up -d` puis <http://localhost:8080> (`admin` / `admin123`).
   ⚠️ **Docker Desktop doit tourner** (icône 🐳 dans la barre de menus) avant cette commande — sinon tu verras « Cannot connect to the Docker daemon ».
 - Prépare Playwright une seule fois : dans le dossier `e2e/`, `npm install` puis `npx playwright install chromium`.
