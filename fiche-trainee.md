@@ -36,7 +36,10 @@ Va dans le dossier **`dojo-ai-pm-s5`** = *le kit de la séance*. C'est ici que t
 
 - Lance Claude Code depuis le dossier `dojo-ai-pm-s5`.
 - 🖥️ Lance l'app avec Docker : `docker compose up -d` puis <http://localhost:8080> (`admin` / `admin123`).
+  ⚠️ **Docker Desktop doit tourner** (icône 🐳 dans la barre de menus) avant cette commande — sinon tu verras « Cannot connect to the Docker daemon ».
 - Prépare Playwright une seule fois : dans le dossier `e2e/`, `npm install` puis `npx playwright install chromium`.
+
+> 🆘 **En cas de souci.** « Cannot connect to the Docker daemon » → démarre Docker Desktop, puis relance `docker compose up -d`. Base dans un état bizarre après plusieurs essais → remets-la à neuf : `docker compose down && rm -f www/data/compta.db && docker compose up -d`.
 
 ### 0.b Ton premier test : un « hello world » (~10 min)
 
