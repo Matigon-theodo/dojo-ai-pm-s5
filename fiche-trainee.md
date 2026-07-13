@@ -126,6 +126,10 @@ Tu peux lui donner les fichiers de code correspondants :
 - legacy : `www/modules/entries/edit.php`
 - cible : `www/modules/entries/edit_cible.php`
 
+> 📌 **Rien à créer : les écritures existent déjà.** « Consulter une écriture », c'est son écran **Voir**. Depuis le menu **Écritures**, clique **Voir** sur une ligne — prends par exemple la pièce **VE2026-000001** (une facture client de 1 200 € au **débit**, sa contrepartie au **crédit**) : tu arrives sur l'URL `…/modules/entries/edit.php?id=2`. La **même** écriture côté réécriture s'ouvre en remplaçant juste le nom du fichier dans l'URL : `…/modules/entries/edit_cible.php?id=2`.
+>
+> 👉 Dis-le clairement à Claude : « **teste la consultation d'une écriture existante du jeu de données (ex. `id=2`), sur `edit.php` ET sur `edit_cible.php`** ». Sans ça, il pourrait écrire un test qui recrée une écriture de zéro, ou en viser une qui n'existe pas — et la comparaison ne voudrait plus rien dire.
+
 **Tu as fini quand** tu peux nommer la divergence — et tu verras qu'elle tombe sur **un des points que tu as toi-même écrits**. Pour la voir, utilise le **rapport de divergences** de Claude, à revoir en images (`npx playwright show-report` dans ton terminal). Tu peux aussi lui demander de générer un .html, plus lisible.
 
 <details><summary>💯 Solution (à n'ouvrir que quand tu penses avoir trouvé)</summary>
@@ -189,17 +193,26 @@ Scénario : <nom>
 
 ### 2.b Fais traduire par Claude, puis lance
 
-Donne à Claude **tes scénarios** (la section « Scénarios de validation » que tu viens de remplir) : « **traduis ces scénarios en test Playwright, sans en ajouter ni en retirer** ». Claude **traduit** — il ne décide pas quoi tester, tu l'as déjà fait. Puis lance le test toi-même :
+Donne à Claude **tes scénarios** (la section « Scénarios de validation » que tu viens de remplir) : « **traduis ces scénarios en test Playwright, sans en ajouter ni en retirer, dans un fichier `tests/lettrage.spec.js`** ». Claude **traduit** — il ne décide pas quoi tester, tu l'as déjà fait.
+
+> 🔁 **Demande à Claude que le test prépare lui-même ses données** (qu'il crée sa facture + son règlement au début du test). Sans ça, ton cas nominal **lettre pour de vrai** les lignes du jeu de données : il passe **vert la 1ʳᵉ fois**, puis **rouge aux runs suivants** (les lignes sont déjà lettrées, elles ont quitté l'onglet « Non lettré »). C'est le piège n°1 de cette étape. **Filet de secours** si tu es coincé : remets la base à neuf, puis relance —
+> ```bash
+> docker compose down && rm -f www/data/compta.db && docker compose up -d   # depuis dojo-ai-pm-s5
+> ```
+
+Puis lance **ton** test toi-même — **cible ton fichier**, pas tout le dossier :
 
 ```bash
-npx playwright test
+npx playwright test tests/lettrage.spec.js
 ```
+
+> ⚠️ **Ne lance pas `npx playwright test` tout court ici.** Ça rejouerait aussi le test de migration de l'Étape 1, **rouge exprès** (le bug des colonnes n'est pas corrigé). Tu verrais un « 1 failed » qui **n'est pas le tien** : c'est normal, ignore-le et ne regarde que tes deux scénarios de lettrage.
 
 Puis **regarde-le tourner** pour voir ce que ça donne — c'est le moment sympa :
 
 ```bash
-npx playwright test --ui       # le navigateur clique sous tes yeux, étape par étape
-npx playwright show-report     # après le run : rejeu en images + vidéo
+npx playwright test tests/lettrage.spec.js --ui   # le navigateur clique sous tes yeux, étape par étape
+npx playwright show-report                        # après le run : rejeu en images + vidéo
 ```
 
 **Tu as fini quand tes deux scénarios passent au vert** : le nominal (ça se lettre) **et** ton garde-fou (le bouton reste bloqué).
